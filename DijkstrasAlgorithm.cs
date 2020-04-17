@@ -22,10 +22,10 @@ namespace DijkstrasAlgorithm
 
     class DijkstrasAlgorithm
     {
-        Dictionary<int, KeyValuePair<int, int>> ways;
+        Dictionary<int, Dictionary<int, int>> ways;
         public static int NO_WAY = -1;
 
-        public DijkstrasAlgorithm(Dictionary<int, KeyValuePair<int, int>> ways)
+        public DijkstrasAlgorithm(Dictionary<int, Dictionary<int, int>> ways)
         {
             this.ways = ways;
         }
@@ -33,23 +33,34 @@ namespace DijkstrasAlgorithm
         public int solve(int from, int to)
         {
             int cur = from;
-            Dictionary<int, int> wayLen = new Dictionary<int, int>();
-            foreach(var a in ways.Keys)
+            int curLenWay = 0;
+            int newLenWay;
+            Dictionary<int, int> waysLen = new Dictionary<int, int>();
+            foreach (var a in ways.Keys)
             {
-                wayLen.Add(a, NO_WAY);
+                waysLen.Add(a, NO_WAY);
             }
-            wayLen.Remove(cur);
+            waysLen.Remove(cur);
 
-            while (true)
+            while (waysLen.Count > 0)
             {
-                foreach (var ver in wayLen.Keys)
+                foreach (var vertexTo in waysLen)
                 {
-                    if (ways[ )
+                    if (ways[cur].ContainsKey(vertexTo.Key))
+                    {
+                        newLenWay = curLenWay + ways[cur][vertexTo.Key];
+                        if (vertexTo.Value == NO_WAY || newLenWay < vertexTo.Value)
+                        {
+                            waysLen[vertexTo.Key] = newLenWay;
+                        }
+                    }
                 }
+                cur = waysLen.Keys.Min();
+                curLenWay = waysLen[cur];
+                if (cur == to) return curLenWay;
+                waysLen.Remove(cur);
             }
-
-
-
+            return -1;
         }
     }
 }
