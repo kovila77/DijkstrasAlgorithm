@@ -44,14 +44,16 @@ namespace DijkstrasAlgorithm
 
             while (waysLen.Count > 0)
             {
-                foreach (var vertexTo in waysLen)
+                List<int> keys = new List<int>();
+                waysLen.Keys.CopyTo(keys, 0);
+                foreach (var vertexTo in keys)
                 {
-                    if (ways[cur].ContainsKey(vertexTo.Key))
+                    if (ways[cur].ContainsKey(vertexTo))
                     {
-                        newLenWay = curLenWay + ways[cur][vertexTo.Key];
-                        if (vertexTo.Value == NO_WAY || newLenWay < vertexTo.Value)
+                        newLenWay = curLenWay + ways[cur][vertexTo];
+                        if (waysLen[vertexTo] == NO_WAY || newLenWay < waysLen[vertexTo])
                         {
-                            waysLen[vertexTo.Key] = newLenWay;
+                            waysLen[vertexTo] = newLenWay;
                         }
                     }
                 }
