@@ -35,6 +35,8 @@ namespace DijkstrasAlgorithm
             int cur = from;
             int curLenWay = 0;
             int newLenWay;
+            if (from == to) return 0;
+            if (!ways.ContainsKey(from)) return -1;
             Dictionary<int, int> waysLen = new Dictionary<int, int>();
             foreach (var a in ways.Keys)
             {
@@ -44,8 +46,8 @@ namespace DijkstrasAlgorithm
 
             while (waysLen.Count > 0)
             {
-                List<int> keys = new List<int>();
-                waysLen.Keys.CopyTo(keys, 0);
+                List<int> keys = new List<int>(waysLen.Keys);
+                //waysLen.Keys.CopyTo(keys, 0);
                 foreach (var vertexTo in keys)
                 {
                     if (ways[cur].ContainsKey(vertexTo))
@@ -57,7 +59,18 @@ namespace DijkstrasAlgorithm
                         }
                     }
                 }
-                cur = waysLen.Keys.Min();
+                int min = int.MaxValue;
+                bool wasChange = false;
+                foreach (var item in waysLen)
+                {
+                    if (item.Value != -1 && item.Value < min)
+                    {
+                        min = item.Value;
+                        cur = item.Key;
+                        wasChange = true;
+                    }
+                }
+                if (!wasChange) return -1;
                 curLenWay = waysLen[cur];
                 if (cur == to) return curLenWay;
                 waysLen.Remove(cur);
